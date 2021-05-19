@@ -1,9 +1,9 @@
 let Promise = require("bluebird")
-const GithubError = require("./gh_error")
+const GithubError = require("../gh_error")
 
 
 module.exports = {
-    name: "service.github.org.repos",
+    name: "service.github.git.listMatchingRefs",
 
     synonims: {
     },
@@ -15,7 +15,11 @@ module.exports = {
         // "sort": "sort",
         // "orderBy":"sort",
         // "aggregate": "aggregate",
-        "org":"org",
+        "owner":"owner",
+        "repo":"repo",
+        "ref":"ref",
+        "per_page": "per_page",
+        "page": "page"
     },
 
     defaultProperty: {
@@ -24,12 +28,23 @@ module.exports = {
     },
 
     execute: function(command, state, config) {
-        
+
         let gh = command.settings.provider
-        let org = command.settings.org
+        let owner = command.settings.owner
+        let repo = command.settings.repo
+        let ref = command.settings.ref
+        let per_page = command.settings.per_page
+        let page = command.settings.page
+
         return new Promise((resolve, reject) => {
 
-                gh.repos.listForOrg({org})
+                gh.git.listMatchingRefs({
+                  owner,
+                  repo,
+                  ref,
+                  per_page,
+                  page
+                })
                     .then( response => {
                         state.head = {
                             type: "json",
@@ -40,7 +55,6 @@ module.exports = {
                     .catch ( e => {
                         reject(new GithubError(e.toString()))
                     })
-    
         })
     },
 

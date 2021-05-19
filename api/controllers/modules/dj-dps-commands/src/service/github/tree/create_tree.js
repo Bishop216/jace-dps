@@ -1,9 +1,9 @@
 let Promise = require("bluebird")
-const GithubError = require("./gh_error")
+const GithubError = require("../gh_error")
 
 
 module.exports = {
-    name: "service.github.repos.getJSON",
+    name: "service.github.git.createTree",
 
     synonims: {
     },
@@ -15,10 +15,9 @@ module.exports = {
         // "sort": "sort",
         // "orderBy":"sort",
         // "aggregate": "aggregate",
-        "repo":"repo",
         "owner":"owner",
-        "path":"path",
-        "ref":"ref"  
+        "repo":"repo",
+        "tree":"tree",
     },
 
     defaultProperty: {
@@ -27,29 +26,25 @@ module.exports = {
     },
 
     execute: function(command, state, config) {
-        
+
         let gh = command.settings.provider
-        let repo = command.settings.repo
         let owner = command.settings.owner
-        let path = command.settings.path
-        let ref = command.settings.ref || "master"
+        let repo = command.settings.repo
+        let tree = command.settings.tree
 
         return new Promise((resolve, reject) => {
 
-                gh.repos.getContent({owner, repo, path, ref})
+                gh.git.createTree({owner, repo, tree})
                     .then( response => {
                         state.head = {
                             type: "json",
-                            data: JSON.parse(
-                                require("js-base64").Base64.decode(response.data.content)
-                                )
+                            data: response
                         }
                         resolve(state)
                     })
                     .catch ( e => {
                         reject(new GithubError(e.toString()))
                     })
-    
         })
     },
 

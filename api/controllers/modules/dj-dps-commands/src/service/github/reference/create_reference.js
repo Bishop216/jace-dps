@@ -1,9 +1,9 @@
 let Promise = require("bluebird")
-const GithubError = require("./gh_error")
+const GithubError = require("../gh_error")
 
 
 module.exports = {
-    name: "service.github.repos.getTree",
+    name: "service.github.git.createRef",
 
     synonims: {
     },
@@ -15,12 +15,11 @@ module.exports = {
         // "sort": "sort",
         // "orderBy":"sort",
         // "aggregate": "aggregate",
-        "repo":"repo",
         "owner":"owner",
-        "path":"path",
+        "repo":"repo",
         "ref":"ref",
-        "startAt":"startAt",
-        "size":  "size"
+        "sha":"sha",
+        "key":"key"
     },
 
     defaultProperty: {
@@ -29,37 +28,33 @@ module.exports = {
     },
 
     execute: function(command, state, config) {
-        
-        let gh = command.settings.provider
-        let repo = command.settings.repo
-        let owner = command.settings.owner
-        let path = command.settings.path
-        let ref = command.settings.ref || "master"
-        let startAt = command.settings.startAt || 0
-        let size = command.settings.size || 5
 
+        let gh = command.settings.provider
+        let owner = command.settings.owner
+        let repo = command.settings.repo
+        let ref = command.settings.ref
+        let sha = command.settings.sha
+        let key = command.settings.key
 
         return new Promise((resolve, reject) => {
 
-            gh.repos.get(`/repos/${owner}/${repo}/contents/${path}?ref=${ref}`)
-                .then( response => {
-                 // gh.git.getTree({
-                 //   owner,
-                 //   repo,
-                 //   tree_sha:response.data.commit.commit.tree.sha,
-                 // }).then( r => {
-                     // let response = r.data.tree
-
-                     state.head = {
+                gh.git.createRef({
+                  owner,
+                  repo,
+                  ref,
+                  sha,
+                  key
+                })
+                    .then( response => {
+                        state.head = {
                             type: "json",
-                            data: response.data.slice(startAt,startAt+size)
+                            data: response
                         }
                         resolve(state)
-                 // })
-                }).catch( e => {
-                    reject(new GithubError(e.toString()))
-                })
-    
+                    })
+                    .catch ( e => {
+                        reject(new GithubError(e.toString()))
+                    })
         })
     },
 
