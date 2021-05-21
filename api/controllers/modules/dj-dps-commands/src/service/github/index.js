@@ -7,9 +7,13 @@ module.exports = [
   require("./repository/delete_repository"),
   require("./repository/list_org_repositories"),
   require("./repository/get_repository_content"),
-  // Branch
-  require("./branch/list_branches"),
-  require("./branch/get_branch"),
+  require("./repository/list_branches"),
+  require("./repository/get_branch"),
+  require("./repository/create_or_update_file_contents"),
+  require("./repository/delete_file"),
+  // Blob
+  require("./blob/create_blob"),
+  require("./blob/get_blob"),
   // Tree
   require("./tree/get_tree"),
   require("./tree/create_tree"),
@@ -22,5 +26,5 @@ module.exports = [
   require("./reference/delete_reference"),
   require("./reference/get_reference"),
   require("./reference/list_references"),
-  require("./reference/update_reference")
+  require("./reference/update_reference"),
 ]

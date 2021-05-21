@@ -4,7 +4,7 @@ const GithubError = require("../gh_error")
 
 
 module.exports = {
-    name: "service.github.git.createTree",
+    name: "service.github.repos.deleteFile",
 
     synonims: {
     },
@@ -18,8 +18,11 @@ module.exports = {
         // "aggregate": "aggregate",
         "owner":"owner",
         "repo":"repo",
-        "tree":"tree",
-        "base_tree":"base_tree",
+        "path":"path",
+        "message":"message",
+        "sha": "sha",
+        "branch": "branch",
+        "committer": "committer",
     },
 
     defaultProperty: {
@@ -32,17 +35,23 @@ module.exports = {
         let gh = command.settings.provider
         let owner = command.settings.owner
         let repo = command.settings.repo
-        let tree_str = command.settings.tree
-        let tree = tree_str ? strToJson(tree_str) : undefined
-        let base_tree = command.settings.base_tree
+        let path = command.settings.path
+        let message = command.settings.message
+        let sha = command.settings.sha
+        let branch = command.settings.branch
+        let committer_str = command.settings.committer
+        let committer = committer_str ? strToJson(committer_str) : undefined
 
         return new Promise((resolve, reject) => {
 
-                gh.git.createTree({
+                gh.repos.deleteFile({
                   owner,
                   repo,
-                  tree,
-                  base_tree
+                  path,
+                  message,
+                  sha,
+                  branch,
+                  committer
                 })
                     .then( response => {
                         state.head = {
@@ -54,6 +63,7 @@ module.exports = {
                     .catch ( e => {
                         reject(new GithubError(e.toString()))
                     })
+
         })
     },
 

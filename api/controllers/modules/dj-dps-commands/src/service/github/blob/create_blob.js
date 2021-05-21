@@ -1,10 +1,9 @@
 let Promise = require("bluebird")
-let strToJson = require("../util").strToJson
 const GithubError = require("../gh_error")
 
 
 module.exports = {
-    name: "service.github.git.createTree",
+    name: "service.github.git.createBlob",
 
     synonims: {
     },
@@ -18,8 +17,8 @@ module.exports = {
         // "aggregate": "aggregate",
         "owner":"owner",
         "repo":"repo",
-        "tree":"tree",
-        "base_tree":"base_tree",
+        "content":"content",
+        "encoding":"encoding",
     },
 
     defaultProperty: {
@@ -32,17 +31,16 @@ module.exports = {
         let gh = command.settings.provider
         let owner = command.settings.owner
         let repo = command.settings.repo
-        let tree_str = command.settings.tree
-        let tree = tree_str ? strToJson(tree_str) : undefined
-        let base_tree = command.settings.base_tree
+        let content = command.settings.content
+        let encoding = command.settings.encoding
 
         return new Promise((resolve, reject) => {
 
-                gh.git.createTree({
+                gh.git.createBlob({
                   owner,
                   repo,
-                  tree,
-                  base_tree
+                  content,
+                  encoding
                 })
                     .then( response => {
                         state.head = {

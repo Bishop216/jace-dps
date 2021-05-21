@@ -26,6 +26,7 @@ module.exports = {
         "has_wiki": "has_wiki",
         "is_template": "is_template",
         "team_id": "team_id",
+        "auto_init": "auto_init",
         "gitignore_template": "gitignore_template",
         "license_template": "license_template",
         "allow_squash_merge": "allow_squash_merge",
@@ -53,6 +54,7 @@ module.exports = {
         let has_wiki = command.settings.has_wiki
         let is_template = command.settings.is_template
         let team_id = command.settings.team_id
+        let auto_init = command.settings.auto_init
         let gitignore_template = command.settings.gitignore_template
         let license_template = command.settings.license_template
         let allow_squash_merge = command.settings.allow_squash_merge
@@ -74,6 +76,7 @@ module.exports = {
                   has_wiki,
                   is_template,
                   team_id,
+                  auto_init,
                   gitignore_template,
                   license_template,
                   allow_squash_merge,

@@ -1,4 +1,5 @@
 let Promise = require("bluebird")
+let strToJson = require("../util").strToJson
 const GithubError = require("../gh_error")
 
 
@@ -38,8 +39,10 @@ module.exports = {
         let message = command.settings.message
         let tree = command.settings.tree
         let parents = command.settings.parents
-        let author = command.settings.author
-        let committer = command.settings.committer
+        let author_str = command.settings.author
+        let author = author_str ? strToJson(author_str) : undefined
+        let committer_str = command.settings.committer
+        let committer = committer_str ? strToJson(committer_str) : undefined
         let signature = command.settings.signature
 
         return new Promise((resolve, reject) => {
